@@ -1,5 +1,6 @@
 import random
 import time
+from typing import Union
 from utils.not_pixel import NotPixelBot
 from asyncio import sleep
 from random import uniform
@@ -14,7 +15,7 @@ import xlsxwriter
 import os
 
 
-async def start(thread: int, session_name: str, phone_number: str, proxy: list[str, None]):
+async def start(thread: int, session_name: str, phone_number: str, proxy: Union[str, None]):
     not_pixel = NotPixelBot(session_name=session_name, phone_number=phone_number, thread=thread, proxy=proxy)
     account = session_name + '.session'
 
@@ -27,9 +28,9 @@ async def start(thread: int, session_name: str, phone_number: str, proxy: list[s
     while True:
         try:
             if time.time()-start_time>relogin:
-                await not_pixel.logout()
                 await sleep(uniform(2, 8))
                 await not_pixel.login()
+                await not_pixel.buy_upgrades()
                 start_time = time.time()
 
 
@@ -46,4 +47,3 @@ async def start(thread: int, session_name: str, phone_number: str, proxy: list[s
 
         except Exception as e:
             logger.error(f"Thread {thread} | {account} | Error: {e}")
-

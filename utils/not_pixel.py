@@ -2,6 +2,7 @@ import json
 import random
 import string
 import time
+from typing import Union
 from utils.core import logger
 from pyrogram import Client
 from pyrogram.raw.functions.messages import RequestAppWebView
@@ -18,7 +19,7 @@ from utils.picture_generator import get_need_pixels, position_to_coordinates
 
 
 class NotPixelBot:
-    def __init__(self, thread: int, session_name: str, phone_number: str, proxy: list[str, None]):
+    def __init__(self, thread: int, session_name: str, phone_number: str, proxy: Union[str, None]):
         self.account = session_name + '.session'
         self.thread = thread
         self.ref_token = config.REF_LINK.split('=')[1]
@@ -105,6 +106,19 @@ class NotPixelBot:
             sleep = random.uniform(*config.DELAYS['PAINT_ERROR'])
             logger.info(f"Thread {self.thread} | {self.account} | Can't Paint pixel | Sleep for {sleep} sec")
             await asyncio.sleep(sleep)
+
+
+    async def buy_upgrades(self):
+        if config.BUY_UPGRADES:
+            resp = await self.session.get("https://notpx.app/api/v1/mining/boost/check/paintReward")
+            if resp.status == 200:
+                response_data = await resp.json()
+                logger.success(f"Thread {self.thread} | {self.account} | Buy upgrage paintReward | Balance {response_data}")
+            
+            resp = await self.session.get("https://notpx.app/api/v1/mining/boost/check/reChargeSpeed")
+            if resp.status == 200:
+                response_data = await resp.json()
+                logger.success(f"Thread {self.thread} | {self.account} | Buy upgrage reChargeSpeed | Balance {response_data}")
 
 
     async def login(self):

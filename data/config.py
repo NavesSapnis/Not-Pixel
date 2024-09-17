@@ -4,15 +4,16 @@ API_HASH = '1234'
 
 REF_LINK = 'https://t.me/notpixel/app?startapp=f720116934'
 
-PAINT_MY_IMAGE = True
-X = range(453,582)
-Y = range(771,878)
+PAINT_MY_IMAGE = True # if you have image that you need to paint. You'll need map picture 1000x1000
+X = range(453,582) # start/end x in your map picture
+Y = range(771,878) # start/end y in your map picture
+BUY_UPGRADES = True # auto buy
 
 
 DELAYS = {
-    "RELOGIN": [600, 1200],  # delay after a login attempt
+    "RELOGIN": [1800, 3600],  # relogin delay
     'ACCOUNT': [3, 7],  # delay between connections to accounts (the more accounts, the longer the delay)
-    'PAINT_ERROR': [400, 500],
+    'PAINT_ERROR': [400, 500], # delay while paint
 }
 
 
