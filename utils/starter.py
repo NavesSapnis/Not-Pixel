@@ -22,6 +22,8 @@ async def start(thread: int, session_name: str, phone_number: str, proxy: Union[
     await sleep(uniform(*config.DELAYS['ACCOUNT']))
     
     await not_pixel.login()
+    await not_pixel.buy_upgrades()
+    await not_pixel.claim_tasks()
     start_time = time.time()
 
     relogin = random.uniform(*config.DELAYS['RELOGIN'])
@@ -31,6 +33,7 @@ async def start(thread: int, session_name: str, phone_number: str, proxy: Union[
                 await sleep(uniform(2, 8))
                 await not_pixel.login()
                 await not_pixel.buy_upgrades()
+                await not_pixel.claim_tasks()
                 start_time = time.time()
 
 

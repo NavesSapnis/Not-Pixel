@@ -59,6 +59,17 @@ class NotPixelBot:
                 f.write(resp.content)
 
 
+    async def claim_tasks(self):
+        tasks = config.TASKS
+        for task in tasks:
+            resp = await self.session.get(f"https://notpx.app/api/v1/mining/task/check/{task}")
+            if resp.status == 200:
+                response_data = await resp.json()
+                if response_data[task] == True:
+                    logger.success(f"Thread {self.thread} | {self.account} | Claimed task {task}")
+            await asyncio.sleep(random.uniform(*config.DELAYS['TASK']))
+
+
     async def hourly_reward_stats(self) -> bool:
         resp = await self.session.get("https://notpx.app/api/v1/mining/status")
         if resp.status == 200:
@@ -98,7 +109,6 @@ class NotPixelBot:
         }
 
         resp = await self.session.post("https://notpx.app/api/v1/repaint/start", data=json.dumps(data))
-
         if resp.status == 200:
             response_data = await resp.json()
             logger.success(f"Thread {self.thread} | {self.account} |{await position_to_coordinates(pixel_id)} Color {color} | Balance {response_data['balance']}")
@@ -113,18 +123,17 @@ class NotPixelBot:
             resp = await self.session.get("https://notpx.app/api/v1/mining/boost/check/paintReward")
             if resp.status == 200:
                 response_data = await resp.json()
-                logger.success(f"Thread {self.thread} | {self.account} | Buy upgrage paintReward | Balance {response_data}")
+                logger.success(f"Thread {self.thread} | {self.account} | Bought upgrage paintReward")
             
             resp = await self.session.get("https://notpx.app/api/v1/mining/boost/check/reChargeSpeed")
             if resp.status == 200:
                 response_data = await resp.json()
-                logger.success(f"Thread {self.thread} | {self.account} | Buy upgrage reChargeSpeed | Balance {response_data}")
+                logger.success(f"Thread {self.thread} | {self.account} | Bought upgrage reChargeSpeed")
 
 
     async def login(self):
         await asyncio.sleep(random.uniform(*config.DELAYS['ACCOUNT']))
         query = await self.get_tg_web_data()
-
         if query is None:
             logger.error(f"Thread {self.thread} | {self.account} | Session {self.account} invalid")
             await self.logout()
