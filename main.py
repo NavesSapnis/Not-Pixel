@@ -1,5 +1,5 @@
 from utils.core.telegram import Accounts
-from utils.starter import start
+from utils.starter import start, stats
 import asyncio
 from data import config
 from itertools import zip_longest
@@ -8,7 +8,7 @@ import os
 
 
 async def main():
-    action = int(input("Select action:\n1. Start soft\n2. Create sessions\n\n> "))
+    action = int(input("Select action:\n1. Start soft\n2. Create sessions\n3. Stats\n\n> "))
 
     if not os.path.exists('sessions'): os.mkdir('sessions')
 
@@ -21,9 +21,11 @@ async def main():
             with open("sessions/accounts.json", 'w') as f:
                 f.write("[]")
 
+    if action == 3:
+        await stats()
+
     if action == 2:
         await Accounts().create_sessions()
-
 
     if action == 1:
         accounts = await Accounts().get_accounts()

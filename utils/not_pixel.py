@@ -169,3 +169,21 @@ class NotPixelBot:
             return query
         except:
             return None
+
+
+    async def stats(self):
+        await asyncio.sleep(random.uniform(*config.DELAYS['ACCOUNT']))
+        await self.login()
+
+        resp = await self.session.get("https://notpx.app/api/v1/users/me")
+        if resp.status == 200:
+            response_data = await resp.json()
+            data_to_save = [
+                response_data.get("id","None"),
+                response_data.get("firstName","None"),
+                response_data.get("balance","None"),
+                response_data.get("isBetaTester","None"),
+                response_data.get("friends","None"),
+            ]
+            await self.logout()
+            return data_to_save
