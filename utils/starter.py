@@ -21,10 +21,17 @@ async def start(thread: int, session_name: str, phone_number: str, proxy: Union[
 
     await sleep(uniform(*config.DELAYS['ACCOUNT']))
     
-    await not_pixel.login()
-    await not_pixel.buy_upgrades()
-    await not_pixel.claim_tasks()
-    start_time = time.time()
+    logged = False
+    while not logged:
+        try:
+            await not_pixel.login()
+            await not_pixel.buy_upgrades()
+            await not_pixel.claim_tasks()
+            start_time = time.time()
+            logged = True
+        except Exception as e:
+            logger.error(f"Thread {thread} | {account} | Error: {e} | Sleep for 10 sec.")
+            asyncio.sleep(10)
 
     relogin = random.uniform(*config.DELAYS['RELOGIN'])
     while True:
