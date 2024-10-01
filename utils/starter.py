@@ -31,7 +31,7 @@ async def start(thread: int, session_name: str, phone_number: str, proxy: Union[
             logged = True
         except Exception as e:
             logger.error(f"Thread {thread} | {account} | Error: {e} | Sleep for 10 sec.")
-            asyncio.sleep(10)
+            await asyncio.sleep(5)
 
     relogin = random.uniform(*config.DELAYS['RELOGIN'])
     while True:
